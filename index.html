@@ -1,284 +1,812 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Tri ân Ngày Nhà giáo Việt Nam 20/11</title>
-<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tri Ân Ngày Nhà Giáo Việt Nam 20/11</title>
 <style>
-:root{color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--gold:#ffd682}
-html{scroll-padding-top:env(safe-area-inset-top,0px)}
-html,body{height:100%;margin:0;background:#05030f;overflow:hidden;font-family:'Pacifico',cursive,sans-serif;color:#fff}
-canvas{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}
-.vig{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 48%,rgba(2,1,8,0) 45%,rgba(2,1,8,.42) 100%)}
-#ttl{position:fixed;left:0;right:0;top:calc(7vh + env(safe-area-inset-top,0px));margin:0;text-align:center;font-weight:400;font-size:clamp(26px,6vw,64px);line-height:1.25;text-shadow:0 0 18px rgba(255,170,200,.55),0 2px 6px rgba(20,10,35,.9);opacity:0;animation:fi 2.4s ease 1s forwards;transition:opacity .8s;pointer-events:none}
-#ttl small{display:block;font-size:.42em;color:var(--gold);letter-spacing:.3em;margin-top:.3em}
-#ttl.hide{animation:none;opacity:0}
-#env{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;background:rgba(4,2,12,0);transition:background .9s;z-index:3}
-#env.on{background:rgba(4,2,12,.45)}
-.en{position:absolute;width:min(380px,78vw);aspect-ratio:3/2;opacity:0;transform:translateY(30px) scale(.92);transition:opacity .7s,transform .9s;perspective:900px}
-#env.on .en{opacity:1;transform:none}
-#env.rd .en{opacity:0;transform:translateY(34vh) scale(.8)}
-.bk,.fr,.fl{position:absolute;inset:0}
-.bk{background:#d9b88a;border-radius:6px;box-shadow:0 12px 40px rgba(0,0,0,.5)}
-.fr{background:linear-gradient(160deg,#f1d9b2,#e6c797);clip-path:polygon(0 0,50% 55%,100% 0,100% 100%,0 100%);border-radius:6px}
-.fl{background:linear-gradient(#e4c293,#d7b07c);clip-path:polygon(0 0,100% 0,50% 55%);transform-origin:50% 0;transition:transform .9s}
-.fl::after{content:"";position:absolute;left:50%;top:55%;width:15%;aspect-ratio:1;border-radius:50%;transform:translate(-50%,-70%);background:radial-gradient(circle at 35% 30%,#e8566e,#9a1f3a);box-shadow:0 2px 6px rgba(0,0,0,.4);transition:opacity .4s}
-#env.op .fl{transform:rotateX(180deg)}
-#env.op .fl::after{opacity:0}
-#ltr{position:absolute;left:50%;top:50%;width:min(600px,90vw);max-height:62vh;overflow:auto;box-sizing:border-box;padding:28px 30px 24px;transform:translate(-50%,-6%) scale(.55);opacity:0;background:linear-gradient(#fbf1dc,#f2e0bd);color:#5a3a2e;border-radius:10px;box-shadow:0 18px 60px rgba(0,0,0,.55),inset 0 0 40px rgba(180,130,80,.25);text-align:center;font-size:clamp(15px,2vw,19px);line-height:1.85;transition:opacity .9s,transform 1.1s cubic-bezier(.2,.8,.2,1)}
-#env.rd #ltr{opacity:1;transform:translate(-50%,-50%);pointer-events:auto}
-#ltr h2{margin:0 0 .6em;font-weight:400;font-size:1.25em;color:#b04a5e}
-#txt{margin:0}
-#ltr .sg{margin-top:1em;color:#b04a5e;font-size:.9em}
-#btn{z-index:5;position:fixed;left:50%;bottom:calc(5vh + env(safe-area-inset-bottom,0px));transform:translateX(-50%);min-height:48px;padding:12px 34px;border:1px solid rgba(255,214,130,.65);border-radius:999px;background:linear-gradient(135deg,rgba(255,128,138,.88),rgba(255,175,120,.88));color:#fff;font:inherit;font-size:clamp(17px,2.4vw,22px);cursor:pointer;box-shadow:0 0 24px rgba(255,128,138,.3),inset 0 0 12px rgba(255,255,255,.25);text-shadow:0 1px 4px rgba(80,20,40,.6);opacity:0;animation:fi 1.6s ease 6s forwards;-webkit-tap-highlight-color:transparent}
-#btn:active{transform:translateX(-50%) scale(.96)}
-@keyframes fi{to{opacity:1}}
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #05030f;
+    overflow: hidden;
+    font-family: 'Segoe UI', 'Be Vietnam Pro', sans-serif;
+    width: 100vw; height: 100vh;
+  }
+
+  #bg-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0;
+  }
+
+  #scene-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  /* ── SVG scene ── */
+  #scene-svg {
+    position: fixed;
+    bottom: 0; left: 0;
+    width: 100%; height: 60%;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  /* ── Title ── */
+  #title-block {
+    position: fixed;
+    top: 32px; left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    z-index: 10;
+    pointer-events: none;
+  }
+  #title-block h1 {
+    font-size: clamp(1.6rem, 4vw, 3rem);
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    background: linear-gradient(135deg, #ffd97d, #ffb3c6, #c8b6ff, #9bf6ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: none;
+    filter: drop-shadow(0 0 18px rgba(200,180,255,0.6));
+    animation: titlePulse 3s ease-in-out infinite;
+  }
+  #title-block p {
+    margin-top: 6px;
+    font-size: clamp(0.85rem, 2vw, 1.1rem);
+    color: rgba(200,210,255,0.75);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+  @keyframes titlePulse {
+    0%,100% { filter: drop-shadow(0 0 18px rgba(200,180,255,0.5)); }
+    50%      { filter: drop-shadow(0 0 32px rgba(255,215,125,0.8)); }
+  }
+
+  /* ── Reveal Button ── */
+  #btn-reveal {
+    position: fixed;
+    bottom: 48px; left: 50%;
+    transform: translateX(-50%);
+    z-index: 20;
+    padding: 14px 42px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: #fff;
+    background: linear-gradient(135deg, #7c3aed, #c026d3, #db2777);
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 0 24px rgba(192,38,211,0.6), 0 0 60px rgba(124,58,237,0.3);
+    transition: transform 0.18s, box-shadow 0.18s;
+    animation: btnFloat 2.4s ease-in-out infinite;
+  }
+  #btn-reveal:hover {
+    transform: translateX(-50%) scale(1.07);
+    box-shadow: 0 0 36px rgba(219,39,119,0.8), 0 0 80px rgba(124,58,237,0.5);
+  }
+  #btn-reveal:active { transform: translateX(-50%) scale(0.97); }
+  @keyframes btnFloat {
+    0%,100% { bottom: 48px; }
+    50%      { bottom: 56px; }
+  }
+
+  /* ── Greeting overlay ── */
+  #greeting-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 30;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(5, 3, 20, 0.0);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+  }
+  #greeting-overlay.visible {
+    opacity: 1;
+    pointer-events: all;
+    background: rgba(5, 3, 20, 0.72);
+    backdrop-filter: blur(6px);
+  }
+  #greeting-card {
+    max-width: min(680px, 90vw);
+    width: 100%;
+    background: linear-gradient(145deg, rgba(30,16,60,0.95), rgba(10,8,30,0.95));
+    border: 1px solid rgba(200,180,255,0.25);
+    border-radius: 24px;
+    padding: 44px 48px;
+    text-align: center;
+    box-shadow:
+      0 0 60px rgba(124,58,237,0.4),
+      0 0 120px rgba(192,38,211,0.2),
+      inset 0 1px 0 rgba(255,255,255,0.08);
+    transform: translateY(30px) scale(0.96);
+    transition: transform 0.5s cubic-bezier(.22,1,.36,1);
+    position: relative;
+  }
+  #greeting-overlay.visible #greeting-card {
+    transform: translateY(0) scale(1);
+  }
+  #greeting-card .quote-mark {
+    font-size: 5rem;
+    line-height: 0.6;
+    color: rgba(200,180,255,0.3);
+    display: block;
+    margin-bottom: 12px;
+  }
+  #greeting-text {
+    font-size: clamp(1rem, 2.5vw, 1.3rem);
+    line-height: 1.8;
+    color: #e8deff;
+    font-style: italic;
+    text-shadow: 0 0 12px rgba(200,180,255,0.4);
+    min-height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .card-footer {
+    margin-top: 28px;
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .card-footer button {
+    padding: 10px 28px;
+    border-radius: 40px;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  #btn-next {
+    background: linear-gradient(135deg, #7c3aed, #c026d3);
+    color: #fff;
+    box-shadow: 0 0 18px rgba(192,38,211,0.5);
+  }
+  #btn-next:hover { transform: scale(1.06); box-shadow: 0 0 28px rgba(192,38,211,0.8); }
+  #btn-close {
+    background: rgba(255,255,255,0.08);
+    color: rgba(200,210,255,0.8);
+    border: 1px solid rgba(200,180,255,0.2);
+  }
+  #btn-close:hover { transform: scale(1.06); background: rgba(255,255,255,0.14); }
+
+  #sparkles-container {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 31;
+    overflow: hidden;
+  }
+  .sparkle {
+    position: absolute;
+    border-radius: 50%;
+    animation: sparkleFly 1.2s ease-out forwards;
+  }
+  @keyframes sparkleFly {
+    0%   { opacity:1; transform: scale(1) translate(0,0); }
+    100% { opacity:0; transform: scale(0) translate(var(--tx), var(--ty)); }
+  }
+
+  /* vignette */
+  body::after {
+    content:'';
+    position:fixed; inset:0; z-index:4;
+    background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.65) 100%);
+    pointer-events:none;
+  }
 </style>
 </head>
 <body>
-<canvas id="c"></canvas>
-<div class="vig"></div>
-<h1 id="ttl">Tri ân Ngày Nhà giáo Việt Nam<small>20 · 11</small></h1>
-<div id="env"><div class="en"><div class="bk"></div><div class="fr"></div><div class="fl"></div></div><div id="ltr"><h2>Thầy cô kính mến,</h2><p id="txt"></p><div class="sg">Học trò của thầy cô</div></div></div>
-<button id="btn" type="button">Mở phong thư</button>
+
+<!-- Stars & shooting stars background -->
+<canvas id="bg-canvas"></canvas>
+<!-- Particle books (sand grains) -->
+<canvas id="scene-canvas"></canvas>
+
+<!-- River + boat + woman in ao dai -->
+<svg id="scene-svg" viewBox="0 0 1200 500" preserveAspectRatio="xMidYMax meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- River gradient -->
+    <linearGradient id="riverGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0d1a3a" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#06101f" stop-opacity="1"/>
+    </linearGradient>
+    <!-- Moonlight on water -->
+    <radialGradient id="moonReflect" cx="50%" cy="0%" r="80%">
+      <stop offset="0%" stop-color="#c8b6ff" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#0a0620" stop-opacity="0"/>
+    </radialGradient>
+    <!-- Ao dai gradient -->
+    <linearGradient id="aoDaiGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#e63670"/>
+      <stop offset="50%" stop-color="#d42060"/>
+      <stop offset="100%" stop-color="#b01555"/>
+    </linearGradient>
+    <linearGradient id="aoDaiHat" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f5e6a0"/>
+      <stop offset="100%" stop-color="#c8b050"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="softGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <!-- Boat wood grain -->
+    <linearGradient id="boatGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#8b5e2a"/>
+      <stop offset="60%" stop-color="#6b4218"/>
+      <stop offset="100%" stop-color="#3d2208"/>
+    </linearGradient>
+    <clipPath id="riverClip">
+      <rect x="0" y="0" width="1200" height="500"/>
+    </clipPath>
+  </defs>
+
+  <!-- River surface -->
+  <rect x="0" y="260" width="1200" height="240" fill="url(#riverGrad)"/>
+  <rect x="0" y="260" width="1200" height="240" fill="url(#moonReflect)"/>
+
+  <!-- Water ripple lines -->
+  <g opacity="0.18" stroke="#a0b8ff" stroke-width="1" fill="none">
+    <path d="M 50 290 Q 150 283 250 290 Q 350 297 450 290"/>
+    <path d="M 500 310 Q 620 302 740 310 Q 860 318 980 310"/>
+    <path d="M 100 340 Q 250 330 400 340 Q 550 350 700 340"/>
+    <path d="M 200 370 Q 400 360 600 370 Q 800 380 1000 370"/>
+    <path d="M 0 400 Q 200 392 400 400 Q 600 408 800 400 Q 1000 392 1200 400"/>
+    <path d="M 150 430 Q 350 420 550 430 Q 750 440 950 430"/>
+  </g>
+
+  <!-- Moon reflection column on water -->
+  <ellipse cx="600" cy="310" rx="22" ry="80" fill="#c8b6ff" opacity="0.08"/>
+  <ellipse cx="600" cy="350" rx="40" ry="40" fill="#c8b6ff" opacity="0.04"/>
+
+  <!-- === BOAT === -->
+  <g id="boat" transform="translate(540, 300)" filter="url(#glow)">
+    <!-- Boat shadow on water -->
+    <ellipse cx="60" cy="52" rx="80" ry="10" fill="#000" opacity="0.3"/>
+    <!-- Boat hull -->
+    <path d="M -75,30 Q -80,20 -60,10 L 180,10 Q 200,20 195,30 Q 150,55 60,55 Q -30,55 -75,30 Z" fill="url(#boatGrad)"/>
+    <!-- Boat rim highlight -->
+    <path d="M -60,10 L 180,10" stroke="#c89a4a" stroke-width="2.5" opacity="0.7" fill="none"/>
+    <!-- Boat inner -->
+    <path d="M -55,25 Q -50,16 -30,14 L 170,14 Q 188,16 183,25 Q 140,45 60,45 Q -20,45 -55,25 Z" fill="#4a2800" opacity="0.5"/>
+    <!-- Oar/pole -->
+    <line x1="150" y1="10" x2="130" y2="-40" stroke="#8b5e2a" stroke-width="3" stroke-linecap="round"/>
+    <!-- Bow decoration -->
+    <path d="M 185,10 Q 198,5 195,20 L 183,20 Z" fill="#c89a4a" opacity="0.8"/>
+  </g>
+
+  <!-- === WOMAN IN AO DAI === -->
+  <g id="woman" transform="translate(630, 170)" filter="url(#softGlow)">
+    <!-- === Non La (Conical hat) === -->
+    <g transform="translate(0,-2)">
+      <ellipse cx="0" cy="-92" rx="35" ry="6" fill="url(#aoDaiHat)" opacity="0.9"/>
+      <path d="M -35,-92 Q 0,-145 35,-92 Z" fill="url(#aoDaiHat)"/>
+      <path d="M -35,-92 Q 0,-145 35,-92" stroke="#c8a830" stroke-width="1" fill="none" opacity="0.6"/>
+      <!-- hat shadow line -->
+      <path d="M -32,-94 Q 0,-142 32,-94" stroke="#a89020" stroke-width="0.5" fill="none" opacity="0.4"/>
+      <!-- Hat string -->
+      <path d="M -18,-96 Q 0,-102 18,-96" stroke="#a07820" stroke-width="1.2" fill="none" opacity="0.7"/>
+    </g>
+
+    <!-- Head -->
+    <circle cx="0" cy="-72" r="14" fill="#f5c5a0"/>
+    <!-- Hair bun -->
+    <ellipse cx="2" cy="-83" rx="10" ry="5" fill="#1a0a00"/>
+    <!-- Face details -->
+    <ellipse cx="-5" cy="-71" rx="2" ry="2.5" fill="#c89080" opacity="0.8"/>
+    <ellipse cx="5" cy="-71" rx="2" ry="2.5" fill="#c89080" opacity="0.8"/>
+    <path d="M -4,-65 Q 0,-62 4,-65" stroke="#c06060" stroke-width="1.2" fill="none"/>
+
+    <!-- Neck -->
+    <rect x="-5" y="-60" width="10" height="10" rx="3" fill="#f5c5a0"/>
+
+    <!-- === Áo Dài body === -->
+    <!-- Collar -->
+    <path d="M -5,-52 Q -8,-55 0,-57 Q 8,-55 5,-52 L 0,-50 Z" fill="#c01040" opacity="0.9"/>
+    <!-- Main robe top -->
+    <path d="M -18,-52 Q -22,-30 -20,20 L 20,20 Q 22,-30 18,-52 Q 10,-55 0,-54 Q -10,-55 -18,-52 Z" fill="url(#aoDaiGrad)"/>
+    <!-- Robe details – side slits suggestion -->
+    <path d="M -20,0 Q -24,20 -18,40" stroke="#ff4080" stroke-width="1" fill="none" opacity="0.5"/>
+    <path d="M 20,0 Q 24,20 18,40" stroke="#ff4080" stroke-width="1" fill="none" opacity="0.5"/>
+    <!-- White inner shirt -->
+    <path d="M -6,-50 Q -10,-30 -8,20 L 8,20 Q 10,-30 6,-50 Q 2,-52 0,-52 Q -2,-52 -6,-50 Z" fill="rgba(255,255,255,0.15)"/>
+    <!-- Robe flap flowing down -->
+    <path d="M -20,20 Q -26,80 -18,130 Q -8,150 0,152 Q 8,150 18,130 Q 26,80 20,20 Z" fill="url(#aoDaiGrad)" opacity="0.95"/>
+    <!-- Flow lines on robe -->
+    <path d="M -10,30 Q -12,80 -8,120" stroke="#ff5090" stroke-width="0.8" fill="none" opacity="0.4"/>
+    <path d="M 10,30 Q 12,80 8,120" stroke="#ff5090" stroke-width="0.8" fill="none" opacity="0.4"/>
+
+    <!-- === White trousers === -->
+    <path d="M -15,135 Q -18,160 -12,170" stroke="rgba(255,255,255,0.7)" stroke-width="8" stroke-linecap="round" fill="none"/>
+    <path d="M 15,135 Q 18,160 12,170" stroke="rgba(255,255,255,0.7)" stroke-width="8" stroke-linecap="round" fill="none"/>
+
+    <!-- === Arms === -->
+    <!-- Left arm raised slightly -->
+    <path d="M -18,-40 Q -32,-20 -28,5" stroke="#f5c5a0" stroke-width="7" stroke-linecap="round" fill="none"/>
+    <!-- Left hand -->
+    <circle cx="-28" cy="8" r="5" fill="#f5c5a0"/>
+    <!-- Right arm – holding lotus -->
+    <path d="M 18,-40 Q 34,-15 32,10" stroke="#f5c5a0" stroke-width="7" stroke-linecap="round" fill="none"/>
+    <!-- Right hand -->
+    <circle cx="32" cy="12" r="5" fill="#f5c5a0"/>
+
+    <!-- === Lotus flower held in right hand === -->
+    <g transform="translate(32,4)">
+      <line x1="0" y1="0" x2="0" y2="-22" stroke="#4a9a30" stroke-width="2"/>
+      <!-- petals -->
+      <ellipse cx="0" cy="-28" rx="6" ry="10" fill="#ff8ab0" transform="rotate(-15,0,-28)" opacity="0.9"/>
+      <ellipse cx="0" cy="-28" rx="6" ry="10" fill="#ff8ab0" transform="rotate(15,0,-28)" opacity="0.9"/>
+      <ellipse cx="0" cy="-28" rx="6" ry="10" fill="#ffaac0" opacity="0.9"/>
+      <ellipse cx="0" cy="-28" rx="5" ry="8" fill="#ffe0ee" transform="rotate(-8,0,-28)" opacity="0.8"/>
+      <ellipse cx="0" cy="-28" rx="5" ry="8" fill="#ffe0ee" transform="rotate(8,0,-28)" opacity="0.8"/>
+      <!-- stamen -->
+      <circle cx="0" cy="-33" r="4" fill="#ffd970"/>
+    </g>
+
+    <!-- Hair strands flowing -->
+    <path d="M 8,-78 Q 20,-65 18,-50" stroke="#1a0a00" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.7"/>
+  </g>
+
+  <!-- Water sparkles near boat -->
+  <g opacity="0.5" fill="#c8d8ff">
+    <circle cx="490" cy="315" r="1.5" opacity="0.6"/>
+    <circle cx="510" cy="325" r="1" opacity="0.4"/>
+    <circle cx="720" cy="320" r="1.5" opacity="0.6"/>
+    <circle cx="740" cy="330" r="1" opacity="0.4"/>
+    <circle cx="560" cy="340" r="1" opacity="0.5"/>
+    <circle cx="680" cy="345" r="1" opacity="0.5"/>
+  </g>
+
+  <!-- Floating lotus on water -->
+  <g transform="translate(460, 330)" opacity="0.7">
+    <ellipse cx="0" cy="0" rx="12" ry="4" fill="#4a9a30" opacity="0.6"/>
+    <ellipse cx="6" cy="-2" rx="5" ry="8" fill="#ff8ab0" opacity="0.8" transform="rotate(-20,6,-2)"/>
+    <ellipse cx="-4" cy="-2" rx="5" ry="8" fill="#ff8ab0" opacity="0.8" transform="rotate(20,-4,-2)"/>
+    <ellipse cx="1" cy="-5" rx="4" ry="7" fill="#ffd0e8" opacity="0.9"/>
+    <circle cx="1" cy="-7" r="3" fill="#ffd970" opacity="0.9"/>
+  </g>
+  <g transform="translate(760, 345)" opacity="0.6">
+    <ellipse cx="0" cy="0" rx="10" ry="3" fill="#4a9a30" opacity="0.5"/>
+    <ellipse cx="5" cy="-2" rx="4" ry="6" fill="#ff9ec0" opacity="0.8" transform="rotate(-15,5,-2)"/>
+    <ellipse cx="-3" cy="-2" rx="4" ry="6" fill="#ff9ec0" opacity="0.8" transform="rotate(15,-3,-2)"/>
+    <ellipse cx="1" cy="-4" rx="3" ry="6" fill="#ffe0ee" opacity="0.9"/>
+    <circle cx="1" cy="-6" r="2.5" fill="#ffd970" opacity="0.9"/>
+  </g>
+
+  <!-- Willow tree left -->
+  <g transform="translate(80, 180)" opacity="0.65">
+    <line x1="0" y1="0" x2="0" y2="-120" stroke="#2a4a1a" stroke-width="6"/>
+    <line x1="0" y1="-60" x2="-40" y2="-20" stroke="#3a5a28" stroke-width="3"/>
+    <path d="M 0,-120 Q -50,-60 -30,0" stroke="#3a7a28" stroke-width="2" fill="none" opacity="0.8"/>
+    <path d="M 0,-110 Q -60,-50 -40,10" stroke="#4a8a30" stroke-width="2" fill="none" opacity="0.7"/>
+    <path d="M 0,-100 Q -40,-40 -25,15" stroke="#3a7a28" stroke-width="1.5" fill="none" opacity="0.6"/>
+    <path d="M 0,-90 Q 30,-30 20,10" stroke="#4a8a30" stroke-width="1.5" fill="none" opacity="0.5"/>
+  </g>
+  <!-- Willow tree right -->
+  <g transform="translate(1120, 190)" opacity="0.55">
+    <line x1="0" y1="0" x2="0" y2="-100" stroke="#2a4a1a" stroke-width="5"/>
+    <path d="M 0,-100 Q 50,-50 30,0" stroke="#3a7a28" stroke-width="2" fill="none" opacity="0.8"/>
+    <path d="M 0,-90 Q 60,-40 40,10" stroke="#4a8a30" stroke-width="2" fill="none" opacity="0.7"/>
+    <path d="M 0,-80 Q 40,-30 25,15" stroke="#3a7a28" stroke-width="1.5" fill="none" opacity="0.6"/>
+  </g>
+</svg>
+
+<!-- Title -->
+<div id="title-block">
+  <h1>🌸 Tri Ân Ngày Nhà Giáo Việt Nam 🌸</h1>
+  <p>20 / 11 — Ngày Nhà Giáo Việt Nam</p>
+</div>
+
+<!-- Reveal button -->
+<button id="btn-reveal" onclick="showGreeting()">✨ Mở Lời Tri Ân ✨</button>
+
+<!-- Greeting overlay -->
+<div id="greeting-overlay">
+  <div id="greeting-card">
+    <span class="quote-mark">"</span>
+    <div id="greeting-text">Đang tải lời chúc...</div>
+    <div class="card-footer">
+      <button id="btn-next" onclick="nextGreeting()">🎲 Lời Chúc Khác</button>
+      <button id="btn-close" onclick="closeGreeting()">✕ Đóng</button>
+    </div>
+  </div>
+</div>
+
+<!-- Sparkles container -->
+<div id="sparkles-container"></div>
+
 <script>
-const M=[
-"Nhân ngày Nhà giáo Việt Nam 20/11, con xin kính chúc thầy cô luôn mạnh khỏe, hạnh phúc và tràn đầy nhiệt huyết với sự nghiệp trồng người. Con cảm ơn thầy cô vì đã luôn tận tình dạy dỗ, truyền đạt những kiến thức quý báu và dìu dắt chúng con trưởng thành hơn từng ngày. Mong thầy cô sẽ luôn giữ được nụ cười trên môi và niềm vui trong cuộc sống.",
-"Nhân dịp 20/11, con xin gửi đến thầy cô những lời chúc tốt đẹp và chân thành nhất. Con chúc thầy cô luôn dồi dào sức khỏe, gặp nhiều may mắn và đạt được thật nhiều thành công trong công việc cũng như cuộc sống. Cảm ơn thầy cô đã luôn kiên nhẫn, yêu thương và dành những điều tốt đẹp nhất cho các thế hệ học sinh.",
-"Con kính chúc thầy cô có một ngày Nhà giáo Việt Nam thật vui vẻ, ấm áp và tràn ngập những kỷ niệm đẹp. Cảm ơn thầy cô đã không quản ngại khó khăn, luôn tận tâm truyền đạt kiến thức và giúp chúng con hiểu thêm nhiều điều hay trong cuộc sống. Mong thầy cô sẽ luôn hạnh phúc và tự hào về những thế hệ học trò mà mình đã dìu dắt.",
-"Nhân ngày đặc biệt này, con muốn gửi lời cảm ơn sâu sắc đến thầy cô vì tất cả những gì thầy cô đã dành cho chúng con. Chúc thầy cô luôn mạnh khỏe, bình an, giữ mãi sự nhiệt huyết và tình yêu với nghề giáo. Mong rằng mỗi ngày đến trường của thầy cô đều tràn ngập niềm vui, tiếng cười và những điều tích cực.",
-"Con xin kính chúc thầy cô một ngày 20/11 thật ý nghĩa và đáng nhớ. Chúc thầy cô luôn trẻ trung, vui vẻ, hạnh phúc và có thật nhiều sức khỏe để tiếp tục hành trình truyền đạt tri thức cho các thế hệ học sinh. Con sẽ luôn ghi nhớ những bài học, lời khuyên và tình cảm quý báu mà thầy cô đã dành cho chúng con.",
-"Nhân ngày Nhà giáo Việt Nam, con kính chúc thầy cô luôn gặp nhiều thuận lợi trong công việc, gặt hái được nhiều thành công và luôn được mọi người yêu quý, kính trọng. Cảm ơn thầy cô đã kiên trì chỉ bảo, động viên chúng con mỗi khi gặp khó khăn. Mong thầy cô sẽ luôn giữ được ngọn lửa đam mê và niềm hạnh phúc với nghề mình đã chọn.",
-"Con chúc thầy cô có một ngày 20/11 thật nhiều niềm vui, nhận được thật nhiều hoa, những lời chúc ý nghĩa và tình cảm chân thành từ học trò. Chúc thầy cô luôn mạnh khỏe, bình an và hạnh phúc bên gia đình. Con mong rằng những công sức và sự tận tụy của thầy cô sẽ luôn được trân trọng và ghi nhớ.",
-"Nhân dịp 20/11, con xin gửi đến thầy cô lời tri ân chân thành nhất. Cảm ơn thầy cô đã luôn đồng hành, giúp đỡ và truyền cho chúng con động lực để cố gắng hơn trong học tập. Chúc thầy cô luôn tràn đầy năng lượng, gặp nhiều may mắn và có thật nhiều khoảnh khắc đáng nhớ trong cuộc sống.",
-"Con kính chúc thầy cô luôn mạnh khỏe, vui vẻ và thành công trên con đường sự nghiệp của mình. Cảm ơn thầy cô vì đã dành thời gian, tâm huyết để dạy dỗ chúng con nên người, không chỉ bằng kiến thức mà còn bằng những bài học quý giá về cách sống và cách đối nhân xử thế. Mong thầy cô sẽ luôn hạnh phúc và bình an.",
-"Nhân ngày Nhà giáo Việt Nam 20/11, con xin chúc thầy cô luôn giữ được sự nhiệt huyết, tận tâm và tình yêu dành cho nghề giáo. Chúc thầy cô có thật nhiều sức khỏe để tiếp tục dìu dắt những thế hệ học sinh đến với tri thức và những ước mơ tốt đẹp. Con cảm ơn thầy cô vì đã luôn là những người truyền cảm hứng và động lực cho chúng con.",
-"Con xin gửi đến thầy cô lời chúc tốt đẹp nhất nhân ngày 20/11. Chúc thầy cô luôn vui vẻ, yêu đời, mạnh khỏe và gặp nhiều điều thuận lợi trong cuộc sống. Cảm ơn thầy cô đã luôn bao dung trước những thiếu sót, kiên nhẫn sửa chữa những lỗi sai và giúp chúng con ngày càng tiến bộ hơn. Mong thầy cô sẽ luôn nhận được thật nhiều tình cảm yêu thương từ học trò.",
-"Nhân ngày Nhà giáo Việt Nam, con kính chúc thầy cô có một ngày lễ thật ấm áp và tràn đầy tình yêu thương. Mong thầy cô luôn nhận được sự kính trọng, biết ơn và những tình cảm chân thành từ các thế hệ học sinh. Cảm ơn thầy cô vì đã luôn âm thầm cống hiến, mang đến cho chúng con những hành trang quý giá để bước vào tương lai.",
-"Con chúc thầy cô luôn có thật nhiều sức khỏe, hạnh phúc và thành công trong sự nghiệp giảng dạy. Dù sau này chúng con có trưởng thành và đi đến những con đường khác nhau, con vẫn sẽ luôn ghi nhớ công ơn dạy dỗ và những kỷ niệm đẹp dưới mái trường. Chúc thầy cô mãi giữ được niềm vui, sự nhiệt huyết và tự hào với nghề cao quý của mình.",
-"Nhân dịp 20/11, con xin kính chúc thầy cô luôn bình an, mạnh khỏe và có thật nhiều niềm vui trong cuộc sống. Cảm ơn thầy cô đã luôn tận tình giảng dạy, truyền cảm hứng và giúp chúng con khám phá những điều mới mẻ. Mong rằng thầy cô sẽ luôn được yêu thương, trân trọng và gặt hái được nhiều thành tựu đáng tự hào.",
-"Con kính chúc thầy cô một ngày Nhà giáo Việt Nam thật đáng nhớ, ngập tràn hoa tươi, lời chúc và những nụ cười hạnh phúc. Chúc thầy cô luôn trẻ trung, yêu đời và có thật nhiều năng lượng tích cực mỗi ngày. Cảm ơn thầy cô vì đã luôn đồng hành, quan tâm và giúp chúng con có thêm niềm tin trên hành trình học tập.",
-"Nhân ngày 20/11, con xin gửi lời tri ân chân thành nhất đến thầy cô. Chúc thầy cô luôn mạnh khỏe, gia đình hạnh phúc, công việc thuận lợi và mọi dự định đều đạt được kết quả tốt đẹp. Cảm ơn thầy cô đã dành cả tâm huyết để gieo những hạt giống tri thức, giúp chúng con từng bước trưởng thành và tự tin theo đuổi ước mơ.",
-"Con chúc thầy cô luôn giữ được nụ cười trên môi, sự lạc quan trong cuộc sống và ngọn lửa nhiệt huyết trong công việc. Con hiểu rằng phía sau mỗi bài giảng là rất nhiều sự chuẩn bị và cố gắng thầm lặng của thầy cô. Vì vậy, con mong thầy cô luôn được mạnh khỏe, hạnh phúc và nhận lại thật nhiều tình yêu thương từ học trò.",
-"Nhân ngày Nhà giáo Việt Nam 20/11, con xin chân thành cảm ơn thầy cô vì đã luôn tận tâm chỉ dạy và giúp đỡ chúng con. Những kiến thức, lời khuyên và bài học mà thầy cô truyền đạt sẽ luôn là hành trang quý báu trên con đường trưởng thành của chúng con. Kính chúc thầy cô luôn bình an, hạnh phúc và thành công trong mọi lĩnh vực.",
-"Con kính chúc thầy cô có một ngày 20/11 thật trọn vẹn và ý nghĩa bên gia đình, đồng nghiệp và những người học trò thân yêu. Mong thầy cô luôn có đủ sức khỏe, niềm vui và động lực để tiếp tục thực hiện sứ mệnh cao quý của mình. Dù thời gian có trôi qua, con vẫn sẽ luôn nhớ đến công ơn và tình cảm mà thầy cô đã dành cho chúng con.",
-"Nhân dịp Ngày Nhà giáo Việt Nam 20/11, con xin gửi đến thầy cô lời chúc mừng và lòng biết ơn sâu sắc nhất. Cảm ơn thầy cô đã luôn tận tụy, kiên nhẫn và hết lòng vì học sinh, không chỉ truyền đạt tri thức mà còn dạy chúng con những bài học quý giá về cuộc sống. Con kính chúc thầy cô luôn mạnh khỏe, hạnh phúc, bình an và thành công trên con đường mình đã chọn. Mong rằng thầy cô sẽ mãi là những người lái đò đáng kính, chắp cánh cho thật nhiều ước mơ bay xa."
+// ═══════════════════════════════════════════════
+//  20 lời chúc 20/11
+// ═══════════════════════════════════════════════
+const GREETINGS = [
+  "Kính chúc thầy/cô sức khỏe dồi dào, hạnh phúc tràn đầy. Những trang giáo án của thầy/cô mãi là ngọn đèn soi sáng con đường chúng em bước tới.",
+  "Nhân ngày 20/11, em xin gửi đến thầy/cô lòng biết ơn sâu sắc nhất. Thầy/cô đã truyền cho chúng em không chỉ kiến thức mà còn cả nhiệt huyết với cuộc đời.",
+  "Như những trang sách mở ra cả thế giới, thầy/cô đã mở ra trước mắt chúng em một chân trời tri thức bao la. Em mãi biết ơn điều đó.",
+  "Chúc thầy/cô ngày Nhà Giáo Việt Nam thật ấm áp và tràn ngập yêu thương. Công ơn thầy/cô tựa như dòng sông chảy mãi không ngừng trong trái tim chúng em.",
+  "Mỗi bài học thầy/cô dạy là một hạt giống tốt lành được gieo vào tâm hồn chúng em. Hôm nay và mãi mãi, chúng em trân trọng từng khoảnh khắc được học dưới mái trường có thầy/cô.",
+  "Kính chúc thầy/cô luôn tươi vui, khỏe mạnh và hạnh phúc. Nghề giáo cao quý như ánh mặt trời — thầy/cô tỏa sáng để chúng em được ấm áp và trưởng thành.",
+  "Nhân dịp 20/11, em muốn nói một lời thật lòng: Những năm tháng được ngồi trên ghế nhà trường, được lắng nghe tiếng giảng của thầy/cô là những ký ức đẹp nhất đời em.",
+  "Chúc thầy/cô có một ngày 20/11 đong đầy niềm vui và sự trân trọng. Thầy/cô xứng đáng được nhận tất cả những điều tốt đẹp nhất từ cuộc sống này.",
+  "Tri ân thầy/cô — người đã kiên nhẫn uốn nắn từng nét chữ, từng bước đi đầu đời của chúng em. Tình cảm ấy không thể nào đong đếm được.",
+  "Như con thuyền vượt sóng nhờ người lái, chúng em vững bước vào đời nhờ có thầy/cô. Kính chúc thầy/cô sức khỏe và hạnh phúc ngày 20/11!",
+  "Mỗi trang vở ngày xưa đều mang dấu ấn của thầy/cô — từng lời phê, từng dấu chấm đỏ nhỏ nhoi là cả một tình yêu thương mà thầy/cô dành cho chúng em.",
+  "Kính chúc thầy/cô nhân ngày Nhà Giáo Việt Nam: Mong rằng mỗi học sinh của thầy/cô đều trở thành những người tử tế, sống có ích cho xã hội — đó là món quà quý nhất chúng em có thể dành tặng lại.",
+  "Thầy/cô không chỉ truyền đạt kiến thức, mà còn dạy chúng em cách nhìn thế giới bằng đôi mắt yêu thương và tâm hồn rộng mở. Chúc thầy/cô mãi bình an.",
+  "Nghề dạy học — nghề cao quý nhất trong các nghề cao quý. Chúc thầy/cô luôn giữ được ngọn lửa đam mê và tình yêu với học trò, dù tháng năm có qua đi.",
+  "Chúng em không đủ lời để diễn tả hết lòng biết ơn với thầy/cô. Chỉ xin chúc thầy/cô sức khỏe dồi dào, tâm hồn thanh thản, và gia đình luôn ấm êm hạnh phúc.",
+  "Kính chúc thầy/cô ngày 20/11 tràn đầy hoa và nụ cười. Chúng em sẽ mãi nhớ về những bài học không chỉ trong sách vở mà còn là những bài học về lẽ sống thầy/cô đã chia sẻ.",
+  "Ánh đèn trong lớp học tắt dần theo năm tháng, nhưng ánh sáng mà thầy/cô thắp lên trong lòng chúng em sẽ tỏa sáng mãi mãi. Tri ân thầy/cô vô vàn!",
+  "Chúc thầy/cô có một ngày Nhà Giáo thật ý nghĩa. Hình ảnh thầy/cô đứng trên bục giảng, đôi mắt sáng và giọng nói ấm áp — đó là ký ức không bao giờ phai trong chúng em.",
+  "Nhân ngày 20/11, chúng em gửi đến thầy/cô những bông hoa tươi thắm nhất, những lời chúc chân thành nhất từ trái tim. Mong thầy/cô luôn khỏe mạnh và hạnh phúc!",
+  "Thầy/cô là người gieo mầm tri thức, chăm bón tương lai. Mỗi học trò trưởng thành là một thành quả đáng tự hào của thầy/cô. Chúc mừng ngày Nhà Giáo Việt Nam 20/11!"
 ];
-const R=Math.random,cl=(v,a,b)=>v<a?a:v>b?b:v,sm=x=>{x=cl(x,0,1);return x*x*(3-2*x)},rn=(a,b)=>a+(b-a)*R(),gs=()=>(R()+R()+R()+R()-2)*1.2;
-const cv=document.getElementById('c'),cx=cv.getContext('2d');
-const off=document.createElement('canvas'),ox=off.getContext('2d');
-const sa=document.createElement('canvas'),sb=document.createElement('canvas'),sc=document.createElement('canvas');
-const sax=sa.getContext('2d'),sbx=sb.getContext('2d'),scx=sc.getContext('2d');
-let CW,CH,W,H,S,S0,img,buf,zb,bg,f,px,py,pz,fx,fy,fz,rx,rz,ux,uy,uz,PX,PY,PZ,pulse=0,bdy=0;
-const LT=9,HL=3.7,tg=[0,1,0];
-const cam={yaw:.55,pitch:.5,dist:22,vy:0,vp:0,mul:1,yoff:0};
-const PAL=[[255,60,60],[255,215,80],[70,215,255],[255,95,210],[110,255,120],[255,155,60]];
-const BC=[[255,128,138],[255,214,130],[170,240,200],[150,190,255],[215,150,240],[255,175,120]];
-const SKIN=[255,214,185],HAIR=[80,62,110],ROSE=[240,100,130],GOLD=[255,214,120],PANT=[248,244,238],HAT=[236,208,150],WOOD=[186,120,72],WOOD2=[214,160,104],PG=[250,240,214],INK=[170,140,110];
-const LV=(()=>{const v=[-.45,.8,.4],n=Math.hypot(...v);return v.map(a=>a/n)})();
-const lit=(a,b,c)=>{const m=Math.hypot(a,b,c)||1;return .68+.5*Math.max(0,(a*LV[0]+b*LV[1]+c*LV[2])/m)};
-const hw=u=>1.05*Math.pow(1-u*u,.45),hr=u=>.45+.85*Math.pow(u,4),hb=u=>-.32*Math.pow(1-u*u,.6);
 
-const add=(X,Y,r,g,b)=>{if(X<0||X>=W||Y<0||Y>=H)return;const j=(Y*W+X)*4;buf[j]+=r;buf[j+1]+=g;buf[j+2]+=b};
-const put=(X,Y,z,r,g,b,s)=>{for(let a=0;a<s;a++){const x=X+a;if(x<0||x>=W)continue;for(let c=0;c<s;c++){const y=Y+c;if(y<0||y>=H)continue;const k=y*W+x;if(z<zb[k]){zb[k]=z;const j=k*4;buf[j]=r;buf[j+1]=g;buf[j+2]=b}}}};
-const pj=(x,y,z)=>{x-=px;y-=py;z-=pz;PZ=x*fx+y*fy+z*fz;if(PZ<.3){PX=-9e9;return}const s=f/PZ;PX=Math.round(W*.5+s*(x*rx+z*rz));PY=Math.round(H*.5-s*(x*ux+y*uy+z*uz))};
+let lastIdx = -1;
 
-const A={x:[],y:[],z:[],r:[],g:[],b:[],gi:[],dl:[]},GR=[];
-let SP=1,OX=0,OY=0;
-const grp=o=>{GR.push(Object.assign({px:0,py:0,pz:0,amp:0,ph:rn(0,6.28),sp:1,rx:0,rz:0,spin:0,base:0},o));return GR.length-1};
-function P(g,x,y,z,c,n,d,k){const l=lit(n[0],n[1],n[2])*(k||1)*rn(.82,1.08);A.x.push(x+OX);A.y.push(y+OY);A.z.push(z);A.r.push(c[0]*l);A.g.push(c[1]*l);A.b.push(c[2]*l);A.gi.push(g);A.dl.push(d+R()*SP)}
-function tube(g,a,b,r0,r1,n,c,d){
-const dx=b[0]-a[0],dy=b[1]-a[1],dz=b[2]-a[2],l=Math.hypot(dx,dy,dz),vx=dx/l,vy=dy/l,vz=dz/l,p=Math.abs(vy)>.9?[1,0,0]:[0,1,0];
-let ax=vy*p[2]-vz*p[1],ay=vz*p[0]-vx*p[2],az=vx*p[1]-vy*p[0];const m=Math.hypot(ax,ay,az);ax/=m;ay/=m;az/=m;
-const bx=vy*az-vz*ay,by=vz*ax-vx*az,bz=vx*ay-vy*ax;
-for(let i=0;i<n;i++){const t=R(),th=rn(0,6.2832),cs=Math.cos(th),sn=Math.sin(th),r=r0+(r1-r0)*t,nx=ax*cs+bx*sn,ny=ay*cs+by*sn,nz=az*cs+bz*sn;P(g,a[0]+dx*t+nx*r,a[1]+dy*t+ny*r,a[2]+dz*t+nz*r,c,[nx,ny,nz],d)}}
-function ball(g,c,r,n,d,col){for(let i=0;i<n;i++){const u=rn(-1,1),th=rn(0,6.2832),s=Math.sqrt(1-u*u),nx=s*Math.cos(th),nz=s*Math.sin(th);P(g,c[0]+nx*r,c[1]+u*r,c[2]+nz*r,typeof col=='function'?col(nx,u,nz):col,[nx,u,nz],d)}}
-function lathe(g,y0,y1,n,pr,col,d,sk){for(let i=0;i<n;i++){const y=rn(y0,y1),th=rn(0,6.2832),cs=Math.cos(th),sn=Math.sin(th);if(sk&&sk(y,cs))continue;const q=pr(y);P(g,q[0]*cs,y,q[1]*sn,typeof col=='function'?col(y):col,[cs/q[0],.15,sn/q[1]],d)}}
-function box(g,c,h,yaw,col,n,d){
-const Ar=[h[1]*h[2],h[1]*h[2],h[0]*h[2],h[0]*h[2],h[0]*h[1],h[0]*h[1]],T=2*(Ar[0]+Ar[2]+Ar[4]),cs=Math.cos(yaw),sn=Math.sin(yaw),spn=col.map(v=>v*.78);
-for(let i=0;i<n;i++){let r=R()*T,k=0;while(k<5&&r>Ar[k]){r-=Ar[k];k++}
-const u=rn(-1,1),v=rn(-1,1);let x,y,z,nx=0,ny=0,nz=0,cc=col;
-if(k<2){nx=k?1:-1;x=nx*h[0];y=u*h[1];z=v*h[2];cc=k?PG:spn}
-else if(k<4){ny=k==3?1:-1;y=ny*h[1];x=u*h[0];z=v*h[2];cc=Math.abs(u)<.6&&Math.abs(v)<.55&&(Math.abs(u)>.54||Math.abs(v)>.49||Math.abs(v)<.05&&Math.abs(u)<.4)?GOLD:col}
-else{nz=k==5?1:-1;z=nz*h[2];x=u*h[0];y=v*h[1];cc=PG}
-P(g,c[0]+x*cs+z*sn,c[1]+y,c[2]-x*sn+z*cs,cc,[nx*cs+nz*sn,ny,-nx*sn+nz*cs],d)}}
-function stack(cxx,czz,k,ci,d){const g=grp({px:cxx,py:.3,pz:czz,amp:.05,sp:rn(.7,1.1),rx:.03,rz:.03});let y=-.02;
-for(let i=0;i<k;i++){const hy=rn(.15,.22);y+=hy;box(g,[cxx+rn(-.12,.12),y,czz+rn(-.12,.12)],[rn(.78,1),hy,rn(1,1.3)],rn(-.5,.5)+i*.2,BC[(i+ci)%6],1000,d+i*.4);y+=hy}}
-function floater(c,ci,d){const g=grp({px:c[0],py:c[1],pz:c[2],amp:.22,sp:rn(.5,.9),rx:.1,rz:.1,spin:rn(.3,.5)});box(g,c,[.85,.17,1.15],0,BC[ci],1300,d);box(g,[c[0],c[1]-.34,c[2]],[.85,.17,1.15],.3,BC[(ci+2)%6],1100,d)}
-function opened(c,ci,d){const g=grp({px:c[0],py:c[1],pz:c[2],amp:.2,sp:rn(.5,.8),rx:.1,rz:.08,spin:.32});
-for(let i=0;i<1500;i++){const s=R()<.5?-1:1,u=R(),v=rn(-1,1),top=R()<.62,y=.42*u-(top?0:.07);
-P(g,c[0]+s*u*1.15,c[1]+y,c[2]+v*.85,top?(Math.sin(v*34)>.55&&u>.08&&u<.92?INK:PG):BC[ci],[-s*.4,top?1:-1,0],d)}}
+function pickGreeting() {
+  let idx;
+  do { idx = Math.floor(Math.random() * GREETINGS.length); }
+  while (idx === lastIdx && GREETINGS.length > 1);
+  lastIdx = idx;
+  return GREETINGS[idx];
+}
 
-SP=2.6;
-const GB=grp({base:.22,amp:.05,sp:.9,rx:.02,rz:.015});
-for(let i=0;i<5200;i++){const u=rn(-.998,.998),fr=rn(-1,1),w=hw(u),b=hb(u),r=hr(u),e=Math.pow(Math.abs(fr),2.4);P(GB,HL*u,b+(r-b)*e,w*fr,Math.abs(fr)>.94?GOLD:WOOD,[0,.45,fr<0?-1:1],.4,.74+.26*Math.sin(e*34))}
-for(let i=0;i<3800;i++){const u=rn(-.998,.998),fr=rn(-1,1),w=hw(u)*.9,b=hb(u)+.07,r=hr(u)-.05,e=Math.pow(Math.abs(fr),2.4);P(GB,HL*u,b+(r-b)*e,w*fr,WOOD2,[0,.8,fr<0?.5:-.5],.4,.7+.3*Math.sin(fr*40))}
-for(let i=0;i<700;i++){const s=R()<.5?-1:1,u=rn(-.99,.99);P(GB,HL*u,hr(u),s*hw(u)*rn(.9,1),GOLD,[0,1,0],.4)}
-for(const x0 of[-2.1,.5,2.2])for(let i=0;i<260;i++){const x=x0+rn(-.13,.13);P(GB,x,.34,rn(-1,1)*hw(x/HL)*.88,WOOD2,[0,1,0],.4)}
+function showGreeting() {
+  document.getElementById('greeting-text').textContent = pickGreeting();
+  document.getElementById('greeting-overlay').classList.add('visible');
+  spawnSparkles();
+  document.getElementById('btn-reveal').style.display = 'none';
+}
 
-SP=3;OX=-1.1;OY=-.2;
-const TY=[1.4,1.7,2,2.2,2.36,2.44,2.52],TX=[.17,.13,.17,.16,.13,.09,.07],TZ=[.27,.19,.24,.27,.3,.1,.075];
-const tp=y=>{let i=0;while(i<5&&y>TY[i+1])i++;const t=cl((y-TY[i])/(TY[i+1]-TY[i]),0,1);return[TX[i]+(TX[i+1]-TX[i])*t,TZ[i]+(TZ[i+1]-TZ[i])*t]};
-const pp=y=>[.16+.03*(1.55-y)/1.4,.27+.07*(1.55-y)/1.4];
-lathe(GB,1.55,2.52,2600,tp,y=>y>2.36||R()<.03?GOLD:ROSE,2.4);
-lathe(GB,.14,1.55,3400,pp,y=>y<.26||R()<.03?GOLD:ROSE,2.4,(y,cs)=>Math.abs(cs)<.5);
-for(const s of[-1,1])tube(GB,[0,1.45,s*.12],[.04,.05,s*.13],.11,.13,450,PANT,2.4);
-tube(GB,[0,2.3,.31],[.08,1.85,.42],.075,.06,280,ROSE,2.6);tube(GB,[.08,1.85,.42],[.2,1.52,.34],.06,.05,240,ROSE,2.6);
-tube(GB,[0,2.3,-.31],[.08,1.85,-.42],.075,.06,280,ROSE,2.6);tube(GB,[.08,1.85,-.42],[.2,1.52,-.34],.06,.05,240,ROSE,2.6);
-ball(GB,[.2,1.52,.34],.065,70,2.6,SKIN);ball(GB,[.2,1.52,-.34],.065,70,2.6,SKIN);
-tube(GB,[.02,2.5,0],[.03,2.62,0],.06,.06,110,SKIN,2.6);
-ball(GB,[.03,2.76,0],.21,700,2.8,(nx,ny)=>nx>.2&&ny<.75?SKIN:HAIR);
-tube(GB,[-.12,2.72,0],[-.22,1.6,0],.14,.08,800,HAIR,2.8);
-for(let i=0;i<1500;i++){const s=Math.sqrt(R()),r=.85*s,th=rn(0,6.2832),cs=Math.cos(th),sn=Math.sin(th);P(GB,.03+r*cs,3.26-.36*s,r*sn,s>.95?[255,238,190]:HAT,[cs*.4,.8,sn*.4],3)}
-OX=0;OY=0;SP=2;
-stack(-4.9,2.2,4,0,3.6);stack(4.6,-2.4,3,2,4.4);stack(1.6,3.6,4,4,5.2);stack(-3,-3.4,3,1,6);
-floater([4.2,3.6,2.4],1,5.8);floater([-4.6,4.4,-1.6],3,6.6);floater([.8,5.4,-3.4],5,7.4);
-opened([-3.8,3.2,2.4],3,6.4);opened([3,5.2,-2.6],4,7.2);
+function nextGreeting() {
+  const el = document.getElementById('greeting-text');
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(8px)';
+  el.style.transition = 'opacity 0.25s, transform 0.25s';
+  setTimeout(() => {
+    el.textContent = pickGreeting();
+    el.style.opacity = '1';
+    el.style.transform = 'translateY(0)';
+  }, 260);
+  spawnSparkles();
+}
 
-const N=A.x.length,tx=Float32Array.from(A.x),ty=Float32Array.from(A.y),tz=Float32Array.from(A.z),cr=Float32Array.from(A.r),cg=Float32Array.from(A.g),cb=Float32Array.from(A.b),gi=Uint8Array.from(A.gi),dl=Float32Array.from(A.dl);
-const sx0=new Float32Array(N),sy0=new Float32Array(N),sz0=new Float32Array(N),du=new Float32Array(N),pf=new Float32Array(N),pph=new Float32Array(N);
-for(let i=0;i<N;i++){sx0[i]=tx[i]*.6+gs()*.8;sz0[i]=tz[i]*.6+gs()*.8;sy0[i]=22+rn(0,8);du[i]=Math.sqrt(2*(sy0[i]-ty[i])/18);pf[i]=rn(1.5,4);pph[i]=rn(0,6.28)}
+function closeGreeting() {
+  document.getElementById('greeting-overlay').classList.remove('visible');
+  document.getElementById('btn-reveal').style.display = '';
+}
 
-const NS=3200,sd=new Float32Array(NS*3),sbs=new Float32Array(NS),ssp=new Float32Array(NS),sph=new Float32Array(NS),str=new Float32Array(NS),stg=new Float32Array(NS),stb=new Float32Array(NS);
-const TN=[[255,255,255],[190,210,255],[255,232,200]];
-for(let i=0;i<NS;i++){const v=[gs(),gs(),gs()],l=Math.hypot(...v)||1;sd[3*i]=v[0]/l;sd[3*i+1]=v[1]/l;sd[3*i+2]=v[2]/l;sbs[i]=i<90?215:rn(40,150);const t=TN[Math.floor(R()*3)];str[i]=t[0];stg[i]=t[1];stb[i]=t[2];ssp[i]=rn(.6,2.6);sph[i]=rn(0,6.28)}
-const sh={a:0,n:3};
-function shoot(t){const k=H/680;
-if(!sh.a){if(t<sh.n)return;sh.a=1;sh.b=t;const an=rn(.26,.7),sp=rn(700,1000)*k;sh.dx=Math.cos(an);sh.dy=Math.sin(an);sh.vx=sh.dx*sp;sh.vy=sh.dy*sp;sh.x=rn(-.05,.65)*W;sh.y=rn(.02,.35)*H;sh.l=rn(.8,1.2)}
-const a=t-sh.b;if(a>sh.l){sh.a=0;sh.n=t+rn(5,10);return}
-const hx=sh.x+sh.vx*a,hy=sh.y+sh.vy*a,fd=(1-a/sh.l)*Math.min(1,a/.1);
-for(let k2=0;k2<34;k2++){const iv=Math.pow(1-k2/34,1.6)*fd;add(Math.round(hx-sh.dx*k2*6*k),Math.round(hy-sh.dy*k2*6*k),200*iv,220*iv,255*iv)}
-for(let a2=-1;a2<=1;a2++)for(let b2=-1;b2<=1;b2++)add(Math.round(hx)+a2,Math.round(hy)+b2,153*fd,153*fd,153*fd)}
+function spawnSparkles() {
+  const container = document.getElementById('sparkles-container');
+  const colors = ['#ffd97d','#ff8ab0','#c8b6ff','#9bf6ff','#a8ff78','#ffb347'];
+  for (let i = 0; i < 28; i++) {
+    const s = document.createElement('div');
+    s.className = 'sparkle';
+    const size = 4 + Math.random() * 7;
+    const x = 20 + Math.random() * 60;
+    const y = 30 + Math.random() * 50;
+    const tx = (Math.random() - 0.5) * 180 + 'px';
+    const ty = (Math.random() - 0.5) * 180 + 'px';
+    s.style.cssText = `
+      left:${x}%; top:${y}%;
+      width:${size}px; height:${size}px;
+      background:${colors[Math.floor(Math.random()*colors.length)]};
+      --tx:${tx}; --ty:${ty};
+      animation-delay:${Math.random()*0.4}s;
+      animation-duration:${0.9+Math.random()*0.6}s;
+      box-shadow: 0 0 ${size*2}px ${colors[Math.floor(Math.random()*colors.length)]};
+    `;
+    container.appendChild(s);
+    setTimeout(() => s.remove(), 2000);
+  }
+}
 
-const NW=7000,wx=new Float32Array(NW),wz=new Float32Array(NW),wr=new Float32Array(NW),wg=new Float32Array(NW),wb=new Float32Array(NW),wp=new Float32Array(NW),ws=new Float32Array(NW),wa=new Float32Array(NW),wk=new Uint8Array(NW),wi=new Uint8Array(NW),wn=new Float32Array(NW);
-for(let i=0;i<NW;i++){let x,z,r,a;do{r=17*Math.pow(R(),.62)+.3;a=rn(0,6.2832);x=r*Math.cos(a);z=r*Math.sin(a)}while(Math.abs(x)<HL+.25&&Math.abs(z)<hw(cl(x/HL,-.99,.99))+.15);
-const k=rn(.55,1)*(.5+.5*sm((r-2.5)/5))*(.22+.78*cl((17-r)/8.5,0,1));wx[i]=x;wz[i]=z;wr[i]=120*k;wg[i]=150*k;wb[i]=205*k;wp[i]=rn(0,6.28);ws[i]=rn(1,3.2);wa[i]=a;wk[i]=R()<.03?1:0;wi[i]=Math.floor(a/6.2832*6)%6;wn[i]=Math.pow(cl(1-Math.abs(r-6.8)/3.6,0,1),1.5)}
+// ═══════════════════════════════════════════════
+//  BACKGROUND CANVAS — Stars + Shooting stars
+// ═══════════════════════════════════════════════
+const bgCanvas = document.getElementById('bg-canvas');
+const bgCtx = bgCanvas.getContext('2d');
 
-const LG=[];
-function lt(x,y,z,ty2,k){LG.push({x,y,z,ty:ty2,k,c:PAL[Math.floor(R()*6)],ph:rn(0,6.28),sp:rn(1.4,3.6),t0:LT+rn(0,2.6),ang:Math.atan2(z,x),a1:rn(0,6.28),a2:rn(0,6.28),a3:rn(0,6.28)})}
-for(let u=-.9;u<=.91;u+=.2)for(const s of[-1,1])lt(HL*u,hr(u)+.12,s*hw(u),0,1);
-lt(-HL,hr(-1)+.15,0,0,1.6);lt(HL,hr(1)+.15,0,0,1.6);
-for(let i=0;i<50;i++)lt(rn(-8,8),rn(.6,7),rn(-8,8),1,1);
-const GL=[],BK=[];
-for(let q=2;q<=7;q++){const x=[],y=[],w=[];for(let a=-q;a<=q;a++)for(let b=-q;b<=q;b++){const d=Math.hypot(a,b);if(d>0&&d<=q){x.push(a);y.push(b);w.push(Math.pow(1-d/q,2)*.9)}}GL[q]={x,y,w}}
-for(let q=3;q<=10;q++){const x=[],y=[],w=[];for(let a=-q;a<=q;a++)for(let b=-q;b<=q;b++){const d=Math.hypot(a,b);if(d<=q){x.push(a);y.push(b);w.push(.1+.22*Math.pow(d/q,5))}}BK[q]={x,y,w}}
+function resizeBg() {
+  bgCanvas.width  = window.innerWidth;
+  bgCanvas.height = window.innerHeight;
+}
+resizeBg();
+window.addEventListener('resize', resizeBg);
 
-const NSN=1600,np=new Float32Array(NSN*3),nv=new Float32Array(NSN),nph=new Float32Array(NSN),nbs=new Float32Array(NSN);
-for(let i=0;i<NSN;i++){np[3*i]=rn(-30,30);np[3*i+1]=rn(-.3,26);np[3*i+2]=rn(-30,30);nv[i]=rn(.9,2.2);nph[i]=rn(0,6.28);nbs[i]=rn(.6,1.4)}
-function snowStep(dt,t){const wxv=.7*Math.sin(t*.35)+.35*Math.sin(t*.93),wzv=.4*Math.cos(t*.27);
-for(let i=0;i<NSN;i++){np[3*i+1]-=nv[i]*dt;np[3*i]+=(wxv+.35*Math.sin(t*1.3+nph[i]))*dt;np[3*i+2]+=(wzv+.35*Math.cos(t*1.1+nph[i]))*dt;if(np[3*i+1]<-.3)np[3*i+1]+=26.3}}
+// Generate stars
+const STAR_COUNT = 320;
+const stars = [];
+for (let i = 0; i < STAR_COUNT; i++) {
+  stars.push({
+    x: Math.random(),
+    y: Math.random() * 0.75,
+    r: 0.4 + Math.random() * 1.4,
+    ph: Math.random() * Math.PI * 2,
+    sp: 0.5 + Math.random() * 1.8,
+    tint: ['#ffffff','#c8d8ff','#ffd8c0','#d8c8ff'][Math.floor(Math.random()*4)],
+    base: 0.3 + Math.random() * 0.7
+  });
+}
 
-function render(t){
-const e=sm(t/6);cam.mul=1+.55*Math.pow(1-e,2);cam.yoff=Math.pow(1-e,2);
-const d=cam.dist*cam.mul,yw=cam.yaw+cam.yoff,cp=Math.cos(cam.pitch);
-px=tg[0]+d*cp*Math.sin(yw);py=tg[1]+d*Math.sin(cam.pitch);pz=tg[2]+d*cp*Math.cos(yw);
-fx=tg[0]-px;fy=tg[1]-py;fz=tg[2]-pz;const fl=Math.hypot(fx,fy,fz);fx/=fl;fy/=fl;fz/=fl;
-rx=-fz;rz=fx;const rl=Math.hypot(rx,rz);rx/=rl;rz/=rl;
-ux=-rz*fy;uy=rz*fx-rx*fz;uz=rx*fy;
-f=.5*Math.min(H,W*.78)/.3839;
-const dist=cam.dist;
-buf.set(bg);zb.fill(Infinity);
+// Shooting stars
+const shooters = [];
+let nextShooter = 3 + Math.random() * 4;
 
-for(let i=0;i<NS;i++){const dx=sd[3*i],dy=sd[3*i+1],dz=sd[3*i+2],z=dx*fx+dy*fy+dz*fz;if(z<.2)continue;
-const X=Math.round(W/2+f*(dx*rx+dz*rz)/z),Y=Math.round(H/2-f*(dx*ux+dy*uy+dz*uz)/z);if(X<1||X>=W-1||Y<1||Y>=H-1)continue;
-const k=sbs[i]*(.62+.38*Math.sin(t*ssp[i]+sph[i]))/255,j=(Y*W+X)*4;buf[j]=str[i]*k;buf[j+1]=stg[i]*k;buf[j+2]=stb[i]*k;
-if(i<90){const a=str[i]*k*.35,b=stg[i]*k*.35,c=stb[i]*k*.35;add(X+1,Y,a,b,c);add(X-1,Y,a,b,c);add(X,Y+1,a,b,c);add(X,Y-1,a,b,c)}}
-shoot(t);
+function spawnShooter(t) {
+  shooters.push({
+    born: t,
+    life: 0.8 + Math.random() * 0.9,
+    x0: (0.05 + Math.random() * 0.5),
+    y0: (0.03 + Math.random() * 0.3),
+    vx:  (0.25 + Math.random() * 0.3) * (Math.random() < 0.5 ? 1 : -1),
+    vy: -(0.15 + Math.random() * 0.2),
+  });
+}
 
-for(const g of GR){g.dy=g.base+g.amp*Math.sin(g.sp*t+g.ph);const a=g.rx*Math.sin(g.sp*.8*t+g.ph+1),b=g.rz*Math.sin(g.sp*.7*t+g.ph+2),s=g.spin?g.spin*t+g.ph:0;g.cs=Math.cos(s);g.sn=Math.sin(s);g.cxa=Math.cos(a);g.sxa=Math.sin(a);g.cza=Math.cos(b);g.sza=Math.sin(b)}
-bdy=GR[0].dy;
+function drawBg(t) {
+  const W = bgCanvas.width, H = bgCanvas.height;
+  bgCtx.clearRect(0, 0, W, H);
 
-const fade=sm((t-1.5)/2.5);
-if(fade>0){const lf=sm((t-LT)/1.5);
-for(let i=0;i<NW;i++){const x=wx[i],z=wz[i],y=.07*Math.sin(.8*x+.9*t)+.06*Math.sin(1.1*z-.7*t)+.04*Math.sin(.5*(x+z)+1.3*t)-.05;
-pj(x,y,z);if(PX<1||PX>=W-1||PY<1||PY>=H-1)continue;
-const fog=cl(1.55-.65*PZ/dist,.5,1);let r=wr[i]*fog*1.35,g=wg[i]*fog*1.35,b=wb[i]*fog*1.35;
-if(lf>0){const c=PAL[wi[i]],pl=(.5+.5*Math.sin(t*.9+wa[i]*3))*.18*lf*wn[i];r+=c[0]*pl;g+=c[1]*pl;b+=c[2]*pl}
-if(wk[i]){const q=Math.pow(.5+.5*Math.sin(t*ws[i]+wp[i]),3);r=r*(1+.7*q)+15*q;g=g*(1+.7*q)+15*q;b=b*(1+.7*q)+15*q}
-put(PX,PY,PZ,r*fade,g*fade,b*fade,2)}}
+  // Deep space gradient
+  const grd = bgCtx.createRadialGradient(W*0.5, H*0.4, 0, W*0.5, H*0.4, W*0.9);
+  grd.addColorStop(0,   '#120828');
+  grd.addColorStop(0.4, '#0a0520');
+  grd.addColorStop(0.8, '#060310');
+  grd.addColorStop(1,   '#030108');
+  bgCtx.fillStyle = grd;
+  bgCtx.fillRect(0, 0, W, H);
 
-for(let i=0;i<N;i++){const d0=dl[i];if(t<d0)continue;const q=GR[gi[i]];
-let x=tx[i]-q.px,y=ty[i]-q.py,z=tz[i]-q.pz;
-const x1=x*q.cs+z*q.sn,z1=-x*q.sn+z*q.cs,y1=y*q.cxa-z1*q.sxa,z2=y*q.sxa+z1*q.cxa,x2=x1*q.cza-y1*q.sza,y2=x1*q.sza+y1*q.cza;
-x=x2+q.px;y=y2+q.py+q.dy;z=z2+q.pz;
-const p=Math.min(1,(t-d0)/du[i]);
-if(p<1){const s=p*p*(3-2*p);x=sx0[i]+(x-sx0[i])*s;y=sy0[i]+(y-sy0[i])*p*p;z=sz0[i]+(z-sz0[i])*s}
-pj(x,y,z);if(PX<1||PX>=W-1||PY<1||PY>=H-1)continue;
-const k=1*(.86+.14*Math.sin(t*pf[i]+pph[i]))*cl(1.55-.65*PZ/dist,.5,1);let r=cr[i]*k,g=cg[i]*k,b=cb[i]*k;
-if(R()<.004){r=r*.35+120;g=g*.35+120;b=b*.35+120}
-put(PX,PY,PZ,r,g,b,cl(Math.round(.075*f/PZ),2,3))}
+  // Nebula blobs
+  const neb = [
+    { cx:0.18, cy:0.22, r:0.25, col:'rgba(80,30,120,0.09)' },
+    { cx:0.80, cy:0.30, r:0.22, col:'rgba(20,60,120,0.08)' },
+    { cx:0.52, cy:0.50, r:0.30, col:'rgba(60,20,100,0.06)' },
+  ];
+  for (const n of neb) {
+    const gr = bgCtx.createRadialGradient(n.cx*W, n.cy*H, 0, n.cx*W, n.cy*H, n.r*W);
+    gr.addColorStop(0, n.col);
+    gr.addColorStop(1, 'rgba(0,0,0,0)');
+    bgCtx.fillStyle = gr;
+    bgCtx.fillRect(0, 0, W, H);
+  }
 
-for(const l of LG){if(t<l.t0-.1)continue;let x=l.x,y=l.y,z=l.z;
-if(l.ty){x+=.7*Math.sin(t*.4+l.a1);y+=.5*Math.sin(t*.5+l.a2);z+=.7*Math.cos(t*.35+l.a3)}else y+=bdy;
-pj(x,y,z);if(PZ<.5||PX<0||PX>=W||PY<0||PY>=H)continue;if(PZ>zb[PY*W+PX]+.45)continue;
-const age=t-l.t0,on=cl(age/.35,0,1);if(on<.01)continue;
-const w=.5+.5*Math.sin(t*.3),p0=.3+.7*Math.pow(.5+.5*Math.sin(t*l.sp+l.ph),1.3),p2=.15+.85*Math.pow(cl(Math.cos(l.ang+l.y*.9-t*2.6),0,1),2);
-const b=((1-w)*p0+w*p2)*on*(1+.35*Math.exp(-Math.max(age,0)*3.5)+pulse*.4),r=l.c[0]*b*.78,g=l.c[1]*b*.78,bl=l.c[2]*b*.78;
-const core=cl(Math.round(.09*f/PZ*l.k),2,3);
-for(let a=0;a<core;a++)for(let c=0;c<core;c++)add(PX+a,PY+c,r,g,bl);
-const G=GL[cl(Math.round(.14*f/PZ*l.k),2,7)];
-for(let q=0;q<G.w.length;q++)add(PX+G.x[q],PY+G.y[q],r*G.w[q],g*G.w[q],bl*G.w[q])}
+  // Stars
+  for (const s of stars) {
+    const tw = s.base * (0.6 + 0.4 * Math.sin(t * s.sp + s.ph));
+    bgCtx.globalAlpha = tw;
+    bgCtx.fillStyle = s.tint;
+    bgCtx.beginPath();
+    bgCtx.arc(s.x * W, s.y * H, s.r, 0, Math.PI * 2);
+    bgCtx.fill();
+  }
+  bgCtx.globalAlpha = 1;
 
-const cxs=px*.5,czs=pz*.5;
-for(let i=0;i<NSN;i++){
-const x=((np[3*i]-cxs+30)%60+60)%60-30+cxs,z=((np[3*i+2]-czs+30)%60+60)%60-30+czs;
-pj(x,np[3*i+1],z);if(PX<1||PX>=W-1||PY<1||PY>=H-1||PZ<.5)continue;if(PZ>=zb[PY*W+PX])continue;
-const r=PZ/dist,a=cl(1.3-.5*r,.35,1)*.7;
-if(i%9==0&&r<.9){const B=BK[cl(Math.round(.09*f/PZ*nbs[i]),3,10)],ab=a*.9;for(let q=0;q<B.w.length;q++){const w=ab*B.w[q];add(PX+B.x[q],PY+B.y[q],225*w,236*w,255*w)}continue}
-if(r>1.25)add(PX,PY,225*a*.55,236*a*.55,255*a*.55);
-else if(r>.7){const k=a*.85;for(let u=0;u<2;u++)for(let v=0;v<2;v++)add(PX+u,PY+v,225*k,236*k,255*k)}
-else{add(PX,PY,225*a,236*a,255*a);const k=a*.7;add(PX+1,PY,225*k,236*k,255*k);add(PX-1,PY,225*k,236*k,255*k);add(PX,PY+1,225*k,236*k,255*k);add(PX,PY-1,225*k,236*k,255*k)}}
+  // Shooting stars
+  for (let i = shooters.length - 1; i >= 0; i--) {
+    const sh = shooters[i];
+    const age = t - sh.born;
+    if (age > sh.life) { shooters.splice(i, 1); continue; }
+    const fade = (1 - age / sh.life) * Math.min(1, age / 0.08);
+    const hx = (sh.x0 + sh.vx * age) * W;
+    const hy = (sh.y0 + sh.vy * age) * H;
+    const len = 60 + Math.random() * 40;
+    const angle = Math.atan2(sh.vy * H, sh.vx * W);
+    const tailX = hx - Math.cos(angle) * len;
+    const tailY = hy - Math.sin(angle) * len;
+    const sg = bgCtx.createLinearGradient(tailX, tailY, hx, hy);
+    sg.addColorStop(0, 'rgba(200,220,255,0)');
+    sg.addColorStop(1, `rgba(220,230,255,${fade * 0.9})`);
+    bgCtx.strokeStyle = sg;
+    bgCtx.lineWidth = 1.5;
+    bgCtx.beginPath();
+    bgCtx.moveTo(tailX, tailY);
+    bgCtx.lineTo(hx, hy);
+    bgCtx.stroke();
+    // head glow
+    bgCtx.globalAlpha = fade * 0.9;
+    bgCtx.fillStyle = '#ddeeff';
+    bgCtx.beginPath();
+    bgCtx.arc(hx, hy, 2, 0, Math.PI*2);
+    bgCtx.fill();
+    bgCtx.globalAlpha = 1;
+  }
 
-ox.putImageData(img,0,0);
-cx.globalCompositeOperation='source-over';cx.globalAlpha=1;cx.imageSmoothingEnabled=true;cx.imageSmoothingQuality='high';
-cx.drawImage(off,0,0,CW,CH);
-sax.drawImage(off,0,0,sa.width,sa.height);
-sbx.globalCompositeOperation='copy';sbx.drawImage(sa,0,0);sbx.globalCompositeOperation='multiply';sbx.drawImage(sa,0,0);sbx.globalCompositeOperation='source-over';
-scx.drawImage(sb,0,0,sc.width,sc.height);
-cx.globalCompositeOperation='lighter';
-cx.globalAlpha=.3;cx.drawImage(sb,0,0,CW,CH);
-cx.globalAlpha=.4;cx.drawImage(sc,0,0,CW,CH);
-cx.globalAlpha=1;cx.globalCompositeOperation='source-over'}
+  // Moon
+  const mx = W * 0.82, my = H * 0.12;
+  const moonGrd = bgCtx.createRadialGradient(mx-4, my-4, 2, mx, my, 38);
+  moonGrd.addColorStop(0, '#fffbe8');
+  moonGrd.addColorStop(0.5, '#ffe8b0');
+  moonGrd.addColorStop(1, 'rgba(220,180,80,0)');
+  bgCtx.fillStyle = moonGrd;
+  bgCtx.beginPath();
+  bgCtx.arc(mx, my, 38, 0, Math.PI*2);
+  bgCtx.fill();
+  // Moon halo
+  bgCtx.globalAlpha = 0.12;
+  const halo = bgCtx.createRadialGradient(mx, my, 36, mx, my, 90);
+  halo.addColorStop(0, '#ffd97d');
+  halo.addColorStop(1, 'rgba(255,180,80,0)');
+  bgCtx.fillStyle = halo;
+  bgCtx.beginPath();
+  bgCtx.arc(mx, my, 90, 0, Math.PI*2);
+  bgCtx.fill();
+  bgCtx.globalAlpha = 1;
+}
 
-function alloc(){
-W=Math.max(64,Math.floor(CW*S));H=Math.max(64,Math.floor(CH*S));
-off.width=W;off.height=H;img=ox.createImageData(W,H);buf=img.data;zb=new Float32Array(W*H);
-sa.width=Math.max(8,W>>2);sa.height=Math.max(8,H>>2);sb.width=sa.width;sb.height=sa.height;sc.width=Math.max(4,sa.width>>2);sc.height=Math.max(4,sa.height>>2);
-ox.globalCompositeOperation='source-over';ox.fillStyle='#000';ox.fillRect(0,0,W,H);ox.globalCompositeOperation='lighter';
-const m=Math.max(W,H);
-[[.18,.25,.3,'24,11,56'],[.82,.72,.34,'10,24,58'],[.52,.48,.42,'20,11,38']].forEach(([a,b,s,c])=>{const g=ox.createRadialGradient(a*W,b*H,0,a*W,b*H,s*m*2);g.addColorStop(0,'rgba('+c+',1)');g.addColorStop(1,'rgba('+c+',0)');ox.fillStyle=g;ox.fillRect(0,0,W,H)});
-ox.globalCompositeOperation='source-over';bg=ox.getImageData(0,0,W,H).data}
-function resize(){const d=Math.min(window.devicePixelRatio||1,1.5);CW=Math.max(2,Math.floor(innerWidth*d));CH=Math.max(2,Math.floor(innerHeight*d));cv.width=CW;cv.height=CH;S0=Math.min(1,Math.sqrt(1.25e6/(CW*CH)));S=S0;alloc()}
-let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(resize,150)});
-resize();
+// ═══════════════════════════════════════════════
+//  SCENE CANVAS — Sand-grain Books
+// ═══════════════════════════════════════════════
+const scCanvas = document.getElementById('scene-canvas');
+const scCtx = scCanvas.getContext('2d');
 
-const pts=new Map();let pd=0,idle=0,tm=0;
-cv.addEventListener('pointerdown',e=>{cv.setPointerCapture(e.pointerId);pts.set(e.pointerId,[e.clientX,e.clientY]);idle=tm;if(pts.size==2){const[a,b]=[...pts.values()];pd=Math.hypot(a[0]-b[0],a[1]-b[1])}});
-cv.addEventListener('pointermove',e=>{const p=pts.get(e.pointerId);if(!p)return;const dx=e.clientX-p[0],dy=e.clientY-p[1];p[0]=e.clientX;p[1]=e.clientY;idle=tm;
-if(pts.size==1){cam.yaw-=dx*.006;cam.pitch=cl(cam.pitch+dy*.004,-.1,1.2);cam.vy=cam.vy*.5-dx*.18}
-else if(pts.size==2){const[a,b]=[...pts.values()],nd=Math.hypot(a[0]-b[0],a[1]-b[1]);if(pd>0&&nd>0)cam.dist=cl(cam.dist*pd/nd,9,32);pd=nd}});
-const up=e=>{pts.delete(e.pointerId)};
-cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',up);
-cv.addEventListener('wheel',e=>{e.preventDefault();cam.dist=cl(cam.dist*Math.exp(e.deltaY*.001),9,32);idle=tm},{passive:false});
+function resizeSc() {
+  scCanvas.width  = window.innerWidth;
+  scCanvas.height = window.innerHeight;
+  buildBooks();
+}
+resizeSc();
+window.addEventListener('resize', resizeSc);
 
-const env=document.getElementById('env'),ltr=document.getElementById('ltr'),txt=document.getElementById('txt'),ttl=document.getElementById('ttl'),btn=document.getElementById('btn');
-let bag=[],last=-1,first=true;
-function pick(){if(!bag.length)bag=M.map((_,i)=>i).sort(()=>R()-.5);let i=bag.pop();if(i===last&&bag.length){const j=bag.pop();bag.push(i);i=j}last=i;return M[i]}
-btn.addEventListener('click',()=>{if(busy)return;busy=true;pulse=1;ttl.classList.add('hide');const w=env.classList.contains('rd');env.classList.remove('rd','op');
-setTimeout(()=>{txt.textContent=pick();ltr.scrollTop=0;env.classList.add('on');btn.textContent='Phong thư khác';
-setTimeout(()=>env.classList.add('op'),w?700:900);setTimeout(()=>env.classList.add('rd'),w?1700:1900);setTimeout(()=>{busy=false},w?2900:3100)},w?900:0)});
-let busy=false;
+// Book shapes (defined in normalized coords 0..1)
+// Each book = array of particles in {nx,ny} normalized to canvas
+let bookParticles = [];
+const BOOK_COLS = [
+  '#ffd97d','#ff8ab0','#c8b6ff','#9bf6ff','#a8e6cf','#ffb347',
+  '#ffeaa7','#fd79a8','#b2bec3','#74b9ff'
+];
 
-let T0=performance.now(),ema=0,fc=0;
-function frame(now){
-const dt=Math.min(.05,(now-T0)/1000);T0=now;tm+=dt;
-snowStep(dt,tm);pulse*=Math.exp(-dt*1.5);
-if(!pts.size){cam.yaw+=cam.vy*dt;cam.vy*=Math.pow(.9,dt*60);if(tm-idle>2.5)cam.yaw+=.12*dt}
-const t1=performance.now();render(tm);
-const ms=performance.now()-t1;if(dt<.2){ema=ema*.95+ms*.05;if(++fc%90==0&&ema>20&&S>.5){S*=.85;alloc()}}
-requestAnimationFrame(frame)}
-requestAnimationFrame(frame);
+function buildBooks() {
+  bookParticles = [];
+  const W = scCanvas.width, H = scCanvas.height;
+  // 5 books stacked/spread in upper-center area
+  const bookDefs = [
+    { x: W*0.30, y: H*0.18, w: W*0.10, h: H*0.09, angle: -0.18, col: '#ffd97d', col2: '#c89a30' },
+    { x: W*0.42, y: H*0.14, w: W*0.11, h: H*0.10, angle:  0.05, col: '#c8b6ff', col2: '#7c3aed' },
+    { x: W*0.55, y: H*0.16, w: W*0.09, h: H*0.09, angle:  0.12, col: '#ff8ab0', col2: '#c026d3' },
+    { x: W*0.65, y: H*0.19, w: W*0.10, h: H*0.08, angle: -0.08, col: '#9bf6ff', col2: '#0ea5e9' },
+    { x: W*0.36, y: H*0.26, w: W*0.12, h: H*0.08, angle:  0.0,  col: '#a8e6cf', col2: '#059669' },
+    { x: W*0.52, y: H*0.24, w: W*0.09, h: H*0.09, angle: -0.1,  col: '#ffb347', col2: '#c05000' },
+  ];
+  const GRAINS_PER_BOOK = 420;
+  for (const b of bookDefs) {
+    const cos = Math.cos(b.angle), sin = Math.sin(b.angle);
+    for (let i = 0; i < GRAINS_PER_BOOK; i++) {
+      const lx = (Math.random() - 0.5) * b.w;
+      const ly = (Math.random() - 0.5) * b.h;
+      const rx = lx * cos - ly * sin + b.x;
+      const ry = lx * sin + ly * cos + b.y;
+      // color varies: spine darker, page area lighter
+      const isSpine = Math.abs(lx) > b.w * 0.42;
+      const isPage  = Math.abs(lx) < b.w * 0.38 && !isSpine;
+      let col;
+      if (isSpine) col = b.col2;
+      else if (Math.abs(ly) > b.h * 0.44) col = hexLerp(b.col, '#ffffff', 0.7);
+      else col = hexLerp(b.col, '#ffffff', Math.random() * 0.3);
+      bookParticles.push({
+        x: rx, y: ry,
+        tx: rx, ty: ry,
+        // for float animation
+        ox: rx, oy: ry,
+        ph: Math.random() * Math.PI * 2,
+        sp: 0.4 + Math.random() * 1.0,
+        col,
+        r: 0.9 + Math.random() * 1.1,
+      });
+    }
+    // Add lines (page lines) as thin grain streaks
+    const lineCount = 5;
+    for (let li = 0; li < lineCount; li++) {
+      const lineY = (li / lineCount - 0.5 + 1/(lineCount*2)) * b.h;
+      const lineGrains = 60;
+      for (let g = 0; g < lineGrains; g++) {
+        const lx = ((g / lineGrains) - 0.5) * b.w * 0.72;
+        const ly = lineY + (Math.random()-0.5)*1.5;
+        const rx = lx * cos - ly * sin + b.x;
+        const ry = lx * sin + ly * cos + b.y;
+        bookParticles.push({
+          x: rx, y: ry, tx: rx, ty: ry, ox: rx, oy: ry,
+          ph: Math.random() * Math.PI * 2,
+          sp: 0.3 + Math.random() * 0.8,
+          col: hexLerp(b.col2, '#c0c0d0', 0.5),
+          r: 0.5,
+        });
+      }
+    }
+  }
+}
+
+function hexLerp(a, b, t) {
+  const pa = hexParse(a), pb = hexParse(b);
+  const r = Math.round(pa[0] + (pb[0]-pa[0])*t);
+  const g = Math.round(pa[1] + (pb[1]-pa[1])*t);
+  const bv = Math.round(pa[2] + (pb[2]-pa[2])*t);
+  return `rgb(${r},${g},${bv})`;
+}
+function hexParse(h) {
+  h = h.replace('#','');
+  if (h.length === 3) h = h[0]+h[0]+h[1]+h[1]+h[2]+h[2];
+  return [parseInt(h.slice(0,2),16), parseInt(h.slice(2,4),16), parseInt(h.slice(4,6),16)];
+}
+
+function drawScene(t) {
+  const W = scCanvas.width, H = scCanvas.height;
+  scCtx.clearRect(0, 0, W, H);
+  for (const p of bookParticles) {
+    // gentle float
+    const dx = Math.sin(t * p.sp + p.ph) * 1.8;
+    const dy = Math.cos(t * p.sp * 0.7 + p.ph) * 1.4;
+    const px = p.ox + dx, py = p.oy + dy;
+    scCtx.globalAlpha = 0.82 + 0.18 * Math.sin(t * p.sp * 1.3 + p.ph);
+    scCtx.fillStyle = p.col;
+    scCtx.beginPath();
+    scCtx.arc(px, py, p.r, 0, Math.PI * 2);
+    scCtx.fill();
+  }
+  scCtx.globalAlpha = 1;
+}
+
+// ═══════════════════════════════════════════════
+//  Boat & woman floating animation via SVG
+// ═══════════════════════════════════════════════
+const boatEl   = document.getElementById('boat');
+const womanEl  = document.getElementById('woman');
+
+function animateSVG(t) {
+  const bobY  = Math.sin(t * 0.7) * 3;
+  const bobR  = Math.sin(t * 0.5) * 1.2;
+  boatEl.setAttribute('transform', `translate(${540 + Math.sin(t*0.4)*6}, ${300 + bobY}) rotate(${bobR}, 60, 30)`);
+  const wX = 630 + Math.sin(t*0.4)*6;
+  const wY = 170 + bobY + Math.sin(t * 1.2) * 0.8;
+  womanEl.setAttribute('transform', `translate(${wX}, ${wY})`);
+}
+
+// ═══════════════════════════════════════════════
+//  Main loop
+// ═══════════════════════════════════════════════
+let startTime = null;
+let lastShooterT = 0;
+let shooterInterval = 4 + Math.random() * 5;
+
+function loop(ts) {
+  if (!startTime) startTime = ts;
+  const t = (ts - startTime) / 1000;
+
+  drawBg(t);
+  drawScene(t);
+  animateSVG(t);
+
+  // Spawn shooting stars
+  if (t - lastShooterT > shooterInterval) {
+    spawnShooter(t);
+    lastShooterT = t;
+    shooterInterval = 4 + Math.random() * 7;
+  }
+
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
 </script>
 </body>
 </html>
