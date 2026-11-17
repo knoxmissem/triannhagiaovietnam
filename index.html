@@ -34,6 +34,17 @@ canvas{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:
 #btn{z-index:5;position:fixed;left:50%;bottom:calc(5vh + env(safe-area-inset-bottom,0px));transform:translateX(-50%);min-height:48px;padding:12px 34px;border:1px solid rgba(255,214,130,.65);border-radius:999px;background:linear-gradient(135deg,rgba(255,128,138,.88),rgba(255,175,120,.88));color:#fff;font:inherit;font-size:clamp(17px,2.4vw,22px);cursor:pointer;box-shadow:0 0 24px rgba(255,128,138,.3),inset 0 0 12px rgba(255,255,255,.25);text-shadow:0 1px 4px rgba(80,20,40,.6);opacity:0;animation:fi 1.6s ease 6s forwards;-webkit-tap-highlight-color:transparent}
 #btn:active{transform:translateX(-50%) scale(.96)}
 @keyframes fi{to{opacity:1}}
+#gate{position:fixed;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;background:rgba(4,2,12,.88);transition:opacity .8s}
+#gate.out{opacity:0;pointer-events:none}
+#gf{width:min(380px,86vw);display:flex;flex-direction:column;gap:16px;align-items:center;text-align:center}
+#gf h2{margin:0;font-weight:400;font-size:clamp(22px,5vw,30px);line-height:1.4;text-shadow:0 0 16px rgba(255,170,200,.5)}
+.sx{display:flex;gap:10px}
+.sx button{min-height:44px;padding:8px 26px;border-radius:999px;border:1px solid rgba(255,214,130,.55);background:rgba(255,255,255,.06);color:#fff;font:inherit;font-size:18px;cursor:pointer}
+.sx button.on{background:linear-gradient(135deg,rgba(255,128,138,.88),rgba(255,175,120,.88))}
+#nm{width:100%;box-sizing:border-box;min-height:50px;padding:10px 20px;border-radius:999px;border:1px solid rgba(255,214,130,.55);background:rgba(255,255,255,.08);color:#fff;font:inherit;font-size:18px;text-align:center;outline:none}
+#nm::placeholder{color:rgba(255,255,255,.55)}
+#nm:focus{border-color:#ffd682;box-shadow:0 0 18px rgba(255,214,130,.35)}
+#go{min-height:48px;padding:12px 38px;border:1px solid rgba(255,214,130,.65);border-radius:999px;background:linear-gradient(135deg,rgba(255,128,138,.88),rgba(255,175,120,.88));color:#fff;font:inherit;font-size:20px;cursor:pointer}
 </style>
 </head>
 <body>
@@ -42,6 +53,7 @@ canvas{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:
 <h1 id="ttl">Tri ân Ngày Nhà giáo Việt Nam<small>20 · 11</small></h1>
 <div id="env"><div class="en"><div class="bk"></div><div class="fr"></div><div class="fl"></div></div><div id="ltr"><h2>Thầy cô kính mến,</h2><p id="txt"></p><div class="sg">Học trò của thầy cô</div></div></div>
 <button id="btn" type="button">Mở phong thư</button>
+<div id="gate"><form id="gf" autocomplete="off"><h2>Bạn muốn gửi lời chúc đến ai?</h2><div class="sx"><button type="button" class="on" data-p="thầy">Thầy</button><button type="button" data-p="cô">Cô</button></div><input id="nm" type="text" maxlength="30" placeholder="Nhập tên thầy / cô"><button type="button" id="go">Bắt đầu</button></form></div>
 <script>
 const M=[
 "Nhân ngày Nhà giáo Việt Nam 20/11, con xin kính chúc thầy cô luôn mạnh khỏe, hạnh phúc và tràn đầy nhiệt huyết với sự nghiệp trồng người. Con cảm ơn thầy cô vì đã luôn tận tình dạy dỗ, truyền đạt những kiến thức quý báu và dìu dắt chúng con trưởng thành hơn từng ngày. Mong thầy cô sẽ luôn giữ được nụ cười trên môi và niềm vui trong cuộc sống.",
@@ -263,12 +275,26 @@ cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',up);
 cv.addEventListener('wheel',e=>{e.preventDefault();cam.dist=cl(cam.dist*Math.exp(e.deltaY*.001),9,32);idle=tm},{passive:false});
 
 const env=document.getElementById('env'),ltr=document.getElementById('ltr'),txt=document.getElementById('txt'),ttl=document.getElementById('ttl'),btn=document.getElementById('btn');
-let bag=[],last=-1,first=true;
-function pick(){if(!bag.length)bag=M.map((_,i)=>i).sort(()=>R()-.5);let i=bag.pop();if(i===last&&bag.length){const j=bag.pop();bag.push(i);i=j}last=i;return M[i]}
+let bag=[],last=-1,ADDR='thầy cô',PFX='thầy';
+const cap=s=>s.charAt(0).toUpperCase()+s.slice(1);
+const per=s=>ADDR==='thầy cô'?s:s.replace(/Thầy cô/g,cap(ADDR)).replace(/thầy cô/g,ADDR).replace(/những người (lái đò|truyền cảm hứng)/g,'người $1');
+function pick(){if(!bag.length)bag=M.map((_,i)=>i).sort(()=>R()-.5);let i=bag.pop();if(i===last&&bag.length){const j=bag.pop();bag.push(i);i=j}last=i;return per(M[i])}
 btn.addEventListener('click',()=>{if(busy)return;busy=true;pulse=1;ttl.classList.add('hide');const w=env.classList.contains('rd');env.classList.remove('rd','op');
 setTimeout(()=>{txt.textContent=pick();ltr.scrollTop=0;env.classList.add('on');btn.textContent='Phong thư khác';
 setTimeout(()=>env.classList.add('op'),w?700:900);setTimeout(()=>env.classList.add('rd'),w?1700:1900);setTimeout(()=>{busy=false},w?2900:3100)},w?900:0)});
 let busy=false;
+const gate=document.getElementById('gate'),gf=document.getElementById('gf'),nm=document.getElementById('nm');
+gf.querySelectorAll('.sx button').forEach(b=>b.addEventListener('click',()=>{gf.querySelectorAll('.sx button').forEach(o=>o.classList.remove('on'));b.classList.add('on');PFX=b.dataset.p}));
+function start(){const n=nm.value.trim().replace(/\s+/g,' ').replace(/\S+/g,w=>cap(w.toLowerCase()));
+ADDR=n?PFX+' '+n:'thầy cô';
+document.querySelector('#ltr h2').textContent=cap(ADDR)+' kính mến,';
+document.querySelector('#ltr .sg').textContent='Học trò của '+ADDR;
+if(n)ttl.querySelector('small').textContent='Kính tặng '+ADDR;
+gate.classList.add('out');nm.blur()}
+document.getElementById('go').addEventListener('click',start);
+gf.addEventListener('submit',e=>{e.preventDefault();start()});
+nm.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();start()}});
+setTimeout(()=>nm.focus(),300);
 
 let T0=performance.now(),ema=0,fc=0;
 function frame(now){
